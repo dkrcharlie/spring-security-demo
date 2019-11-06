@@ -1,31 +1,40 @@
 package com.dkrcharlie.demo.springsecurity.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import javax.sql.DataSource;
 
 @EnableWebSecurity
 public class SecurityConfiguration {
+
+    @Autowired
+    DataSource dataSource;
+
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth)
+            throws Exception {
+        auth.jdbcAuthentication()
+                .dataSource(dataSource)
+                .withDefaultSchema()
+                .withUser(User.withUsername("user")
+                        .password(passwordEncoder().encode("password"))
+                        .roles("USER"))
+                .withUser(User.withUsername("admin")
+                        .password(passwordEncoder().encode("password"))
+                        .roles("ADMIN"))
+                .withUser(User.withUsername("manager")
+                        .password(passwordEncoder().encode("password"))
+                        .roles("MANGER"));
+    }
     @Bean
-    public UserDetailsService userDetailsService(){
-        UserDetails user = User.withDefaultPasswordEncoder()
-                .username("user")
-                .password("password")
-                .roles("USER")
-                .build();
-        UserDetails admin = User.withDefaultPasswordEncoder()
-                .username("admin")
-                .password("password")
-                .roles("ADMIN")
-                .build();
-        UserDetails manager = User.withDefaultPasswordEncoder()
-                .username("manager")
-                .password("password")
-                .roles("MANGER")
-                .build();
-        return new InMemoryUserDetailsManager(user,admin,manager);
+    public PasswordEncoder passwordEncoder()
+    {
+        return new BCryptPasswordEncoder();
     }
 }

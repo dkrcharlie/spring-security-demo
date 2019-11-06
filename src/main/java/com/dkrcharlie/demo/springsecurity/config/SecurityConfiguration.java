@@ -30,7 +30,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user").hasAnyRole("admin","user")
                 .antMatchers("/").permitAll()
                 .and()
-                .formLogin();
+                .formLogin()
+                .and()
+                .logout();
     }
 
     @Bean

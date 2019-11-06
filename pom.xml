@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.dkrcharlie.demo</groupId>
     <artifactId>spring-security-demo</artifactId>
-    <version>spring_security_demo_basic</version>
+    <version>spring_security_demo_0.1</version>
     <name>spring-security-demo</name>
     <description>Demo project for Spring Boot</description>
 

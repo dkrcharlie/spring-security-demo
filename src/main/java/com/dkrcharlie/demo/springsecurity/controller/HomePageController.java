@@ -26,7 +26,7 @@ public class HomePageController {
     }
 
     @GetMapping("/manager")
-    @Secured("hasRole('ROLE_MANAGER')")
+    @Secured("ROLE_MANAGER")
     public String managerHomePage() {
         return "<H1>Manager Home Page</H1>";
     }
